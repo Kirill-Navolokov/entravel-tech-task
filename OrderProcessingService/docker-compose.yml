@@ -16,6 +16,23 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+  
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   api:
     build:
@@ -26,12 +43,16 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     environment:
       ASPNETCORE_ENVIRONMENT: "Development"
       ASPNETCORE_URLS: "http://+:8080"
+      RabbitMQ__HostName: "amqp://guest:guest@rabbitmq:5672/"
       ConnectionStrings__OrdersDb: "Host=postgres;Port=5432;Database=OrdersDb;Username=postgres;Password=example_pw;SSL Mode=Disable"
     ports:
       - "8080:8080"
 
 volumes:
   pgdata:
+  rabbitmq_data:

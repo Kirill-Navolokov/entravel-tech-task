@@ -23,7 +23,7 @@ builder.Services.AddSingleton<IOrderService, OrderService>()
 
 builder.Services.AddDAL(builder.Configuration.GetConnectionString("OrdersDb")!);
 
-//builder.Services.AddHostedService<OrderProcessor>();
+builder.Services.AddHostedService<OrderProcessor>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

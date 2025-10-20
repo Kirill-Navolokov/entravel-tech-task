@@ -18,7 +18,7 @@ public class RabbitMessagingService : IMessagingService
     {
         _rabbitConnectionFactory = new ConnectionFactory
         {
-            HostName = options.Value.HostName
+            Uri = new Uri(options.Value.HostName)
         };
     }
 
