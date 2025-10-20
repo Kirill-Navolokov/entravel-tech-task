@@ -30,7 +30,6 @@ public class OrderProcessor(
     public override async Task StopAsync(CancellationToken cancellationToken)
     {
         //Unsubscribe from orders processing here if needed
-
         await base.StopAsync(cancellationToken);
     }
 
@@ -41,6 +40,9 @@ public class OrderProcessor(
         var order = await orderRepo.GetAsync(id);
         if (order == null)
             return;
+
+        if (order.TotalAmount > 500)
+            order.TotalAmount *= 0.9;
 
         order.Status = DAL.Enums.OrderStatus.Processed;
 
