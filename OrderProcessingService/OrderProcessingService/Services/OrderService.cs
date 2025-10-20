@@ -1,10 +1,11 @@
 using Microsoft.Extensions.Options;
-using OrderProcessingService.Config;
 using OrderProcessingService.DAL.Entities;
 using OrderProcessingService.DAL.Repos;
 using OrderProcessingService.Dtos;
 using OrderProcessingService.Mappers;
-using OrderProcessingService.Messages;
+using OrderProcessingService.Messaging.Config;
+using OrderProcessingService.Messaging.Messages;
+using OrderProcessingService.Messaging.Services;
 
 namespace OrderProcessingService.Services;
 
@@ -44,18 +45,5 @@ public class OrderService(
         var entities = await orderRepo.GetByCustomer(customerId);
 
         return entities.Select(e => mapper.Map(e));
-    }
-
-    public async Task ProcessAsync(Guid id)
-    {
-        await Task.Delay(10000);
-
-        var order = await orderRepo.GetAsync(id);
-        if (order == null)
-            return;
-
-        order.Status = DAL.Enums.OrderStatus.Processed;
-
-        await orderRepo.UpdateAsync(order);
     }
 }

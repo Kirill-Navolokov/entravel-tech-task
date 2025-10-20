@@ -1,4 +1,4 @@
-namespace OrderProcessingService.Services;
+namespace OrderProcessingService.Messaging.Services;
 
 public interface IMessagingService
 {

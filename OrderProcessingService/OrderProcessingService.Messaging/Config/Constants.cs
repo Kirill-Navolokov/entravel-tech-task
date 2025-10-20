@@ -1,4 +1,4 @@
-namespace OrderProcessingService.Config;
+namespace OrderProcessingService.Messaging.Config;
 
 public class Constants
 {

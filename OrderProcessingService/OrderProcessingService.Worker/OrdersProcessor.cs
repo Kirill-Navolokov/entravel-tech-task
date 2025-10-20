@@ -1,13 +1,16 @@
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using OrderProcessingService.Config;
-using OrderProcessingService.Messages;
-using OrderProcessingService.Services;
+using OrderProcessingService.DAL.Entities;
+using OrderProcessingService.DAL.Repos;
+using OrderProcessingService.Messaging.Config;
+using OrderProcessingService.Messaging.Messages;
+using OrderProcessingService.Messaging.Services;
 
 namespace OrderProcessingService.Workers;
 
 public class OrderProcessor(
     IMessagingService messagingService,
-    IOrderService orderService,
+    IRepository<OrderEntity> orderRepo,
     IOptions<MessageQueueOptions> options) : BackgroundService
 {
     public override async Task StartAsync(CancellationToken cancellationToken)
@@ -16,7 +19,7 @@ public class OrderProcessor(
 
         await messagingService.Subscribe<ProcessOrderMessage>(
             options.Value.Queues[Constants.QueueNames.Orders],
-            (message) => orderService.ProcessAsync(message.OrderId));
+            (message) => ProcessOrderAsync(message.OrderId));
     }
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -29,5 +32,18 @@ public class OrderProcessor(
         //Unsubscribe from orders processing here if needed
 
         await base.StopAsync(cancellationToken);
+    }
+
+    public async Task ProcessOrderAsync(Guid id)
+    {
+        await Task.Delay(10000);
+
+        var order = await orderRepo.GetAsync(id);
+        if (order == null)
+            return;
+
+        order.Status = DAL.Enums.OrderStatus.Processed;
+
+        await orderRepo.UpdateAsync(order);
     }
 }

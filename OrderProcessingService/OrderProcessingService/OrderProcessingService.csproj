@@ -21,5 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="../OrderProcessingService.DAL/OrderProcessingService.DAL.csproj" />
+    <ProjectReference Include="../OrderProcessingService.Messaging/OrderProcessingService.Messaging.csproj" />
   </ItemGroup>
 </Project>

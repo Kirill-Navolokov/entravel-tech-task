@@ -1,29 +1,23 @@
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
-using OrderProcessingService.Config;
 using OrderProcessingService.DAL;
 using OrderProcessingService.DAL.Entities;
 using OrderProcessingService.Dtos;
 using OrderProcessingService.Mappers;
+using OrderProcessingService.Messaging;
 using OrderProcessingService.Middleware;
 using OrderProcessingService.Services;
-using OrderProcessingService.Workers;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration
     .AddJsonFile("appsettings.json", false)
     .AddEnvironmentVariables();
 
-builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection("RabbitMQ"))
-    .Configure<MessageQueueOptions>(builder.Configuration.GetSection("MessageQueues"));
-
 builder.Services.AddSingleton<IOrderService, OrderService>()
-    .AddSingleton<IMessagingService, RabbitMessagingService>()
     .AddSingleton<IMapper<RequestOrderDto, ResponseOrderDto, OrderEntity>, OrderMapper>();
 
 builder.Services.AddDAL(builder.Configuration.GetConnectionString("OrdersDb")!);
-
-builder.Services.AddHostedService<OrderProcessor>();
+builder.Services.AddMessaging(builder.Configuration);
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

@@ -1,11 +1,11 @@
 using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
-using OrderProcessingService.Config;
+using OrderProcessingService.Messaging.Config;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-namespace OrderProcessingService.Services;
+namespace OrderProcessingService.Messaging.Services;
 
 public class RabbitMessagingService : IMessagingService
 {
@@ -19,6 +19,7 @@ public class RabbitMessagingService : IMessagingService
         _rabbitConnectionFactory = new ConnectionFactory
         {
             Uri = new Uri(options.Value.HostName)
+            //HostName = options.Value.HostName
         };
     }
 

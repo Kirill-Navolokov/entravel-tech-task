@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderProcessingService", "O
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderProcessingService.DAL", "OrderProcessingService.DAL\OrderProcessingService.DAL.csproj", "{AD03F4E5-B04F-4BDE-A7BD-9064E8D1EC9F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderProcessingService.Worker", "OrderProcessingService.Worker\OrderProcessingService.Worker.csproj", "{0CE41A49-307A-472D-9B89-36ED0C00569F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderProcessingService.Messaging", "OrderProcessingService.Messaging\OrderProcessingService.Messaging.csproj", "{C9894170-3B1B-416A-B1DD-8D7A35912F8F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,13 @@ Global
 		{AD03F4E5-B04F-4BDE-A7BD-9064E8D1EC9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD03F4E5-B04F-4BDE-A7BD-9064E8D1EC9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD03F4E5-B04F-4BDE-A7BD-9064E8D1EC9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CE41A49-307A-472D-9B89-36ED0C00569F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CE41A49-307A-472D-9B89-36ED0C00569F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CE41A49-307A-472D-9B89-36ED0C00569F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CE41A49-307A-472D-9B89-36ED0C00569F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9894170-3B1B-416A-B1DD-8D7A35912F8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9894170-3B1B-416A-B1DD-8D7A35912F8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9894170-3B1B-416A-B1DD-8D7A35912F8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9894170-3B1B-416A-B1DD-8D7A35912F8F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -4,6 +4,7 @@ WORKDIR /src
 COPY OrderProcessingService.sln ./
 COPY OrderProcessingService/OrderProcessingService.csproj src/OrderProcessingService/
 COPY OrderProcessingService.DAL/OrderProcessingService.DAL.csproj src/OrderProcessingService.DAL/
+COPY OrderProcessingService.Messaging/OrderProcessingService.Messaging.csproj src/OrderProcessingService.Messaging/
 RUN dotnet restore src/OrderProcessingService/OrderProcessingService.csproj
 
 COPY ./ ./src/

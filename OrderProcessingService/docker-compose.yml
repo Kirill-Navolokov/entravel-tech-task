@@ -37,7 +37,7 @@ services:
   api:
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: ./OrderProcessingService/Dockerfile
     container_name: orderprocessing-api
     restart: unless-stopped
     depends_on:
@@ -49,9 +49,27 @@ services:
       ASPNETCORE_ENVIRONMENT: "Development"
       ASPNETCORE_URLS: "http://+:8080"
       RabbitMQ__HostName: "amqp://guest:guest@rabbitmq:5672/"
+      MessageQueues__Queues__Orders: "order-rabbit-mq"
       ConnectionStrings__OrdersDb: "Host=postgres;Port=5432;Database=OrdersDb;Username=postgres;Password=example_pw;SSL Mode=Disable"
     ports:
       - "8080:8080"
+  
+  worker:
+    build:
+      context: .
+      dockerfile: ./OrderProcessingService.Worker/Dockerfile
+    container_name: orderprocessing-worker
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      RabbitMQ__HostName: "amqp://guest:guest@rabbitmq:5672/"
+      MessageQueues__Queues__Orders: "order-rabbit-mq"
+      ConnectionStrings__OrdersDb: "Host=postgres;Port=5432;Database=OrdersDb;Username=postgres;Password=example_pw;SSL Mode=Disable"
 
 volumes:
   pgdata:
