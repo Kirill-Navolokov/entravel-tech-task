@@ -10,8 +10,9 @@ using OrderProcessingService.Services;
 using OrderProcessingService.Workers;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Configuration.AddEnvironmentVariables()
-    .AddJsonFile("appsettings.json", false);
+builder.Configuration
+    .AddJsonFile("appsettings.json", false)
+    .AddEnvironmentVariables();
 
 builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection("RabbitMQ"))
     .Configure<MessageQueueOptions>(builder.Configuration.GetSection("MessageQueues"));
@@ -22,7 +23,7 @@ builder.Services.AddSingleton<IOrderService, OrderService>()
 
 builder.Services.AddDAL(builder.Configuration.GetConnectionString("OrdersDb")!);
 
-builder.Services.AddHostedService<OrderProcessor>();
+//builder.Services.AddHostedService<OrderProcessor>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

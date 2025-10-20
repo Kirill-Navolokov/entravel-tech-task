@@ -27,7 +27,7 @@ public class OrdersDbContext(DbContextOptions<OrdersDbContext> options) : DbCont
         modelBuilder.Entity<OrderEntity>()
             .Property(o => o.Id)
             .HasColumnType("uuid")
-            .ValueGeneratedOnAdd(); ;
+            .ValueGeneratedOnAdd();
 
         modelBuilder.Entity<OrderItemEntity>()
             .HasKey(x => x.Id);
