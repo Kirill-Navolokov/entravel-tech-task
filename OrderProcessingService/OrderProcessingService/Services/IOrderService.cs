@@ -7,4 +7,6 @@ public interface IOrderService
     Task<ResponseOrderDto> AddAsync(RequestOrderDto order);
 
     Task<ResponseOrderDto?> GetAsync(Guid id);
+
+    Task ProcessAsync(Guid id);
 }
