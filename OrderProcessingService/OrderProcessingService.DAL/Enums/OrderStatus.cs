@@ -1,4 +1,4 @@
-namespace OrderProcessingService.Enums;
+namespace OrderProcessingService.DAL.Enums;
 
 public enum OrderStatus
 {

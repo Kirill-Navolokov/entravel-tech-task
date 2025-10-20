@@ -1,7 +1,8 @@
 using Microsoft.Extensions.Options;
 using OrderProcessingService.Config;
+using OrderProcessingService.DAL.Entities;
+using OrderProcessingService.DAL.Repos;
 using OrderProcessingService.Dtos;
-using OrderProcessingService.Entities;
 using OrderProcessingService.Mappers;
 using OrderProcessingService.Messages;
 
@@ -11,17 +12,16 @@ public class OrderService(
     ILogger<OrderService> logger,
     IMapper<RequestOrderDto, ResponseOrderDto, OrderEntity> mapper,
     IMessagingService messagingService,
-    IOptions<MessageQueueOptions> options) : IOrderService
+    IOptions<MessageQueueOptions> options,
+    IRepository<OrderEntity> orderRepo) : IOrderService
 {
-    private readonly List<OrderEntity> _orders = new List<OrderEntity>();
-
     public async Task<ResponseOrderDto> AddAsync(RequestOrderDto order)
     {
         var orderEntity = mapper.Map(order);
         orderEntity.Id = Guid.NewGuid();
-        orderEntity.Status = Enums.OrderStatus.Created;
+        orderEntity.Status = DAL.Enums.OrderStatus.Created;
 
-        _orders.Add(orderEntity);
+        orderEntity = await orderRepo.AddAsync(orderEntity);
 
         logger.LogInformation("Order added");
         await messagingService.PublishAsync(
@@ -31,22 +31,31 @@ public class OrderService(
         return mapper.Map(orderEntity);
     }
 
-    public Task<ResponseOrderDto?> GetAsync(Guid id)
+    public async Task<ResponseOrderDto?> GetAsync(Guid id)
     {
-        var entity = _orders.FirstOrDefault(o => o.Id == id);
+        var entity = await orderRepo.GetAsync(id);
         var response = entity is null ? null : mapper.Map(entity);
 
-        return Task.FromResult(response);
+        return response;
+    }
+
+    public async Task<IEnumerable<ResponseOrderDto>> GetByCustomer(Guid customerId)
+    {
+        var entities = await orderRepo.GetByCustomer(customerId);
+
+        return entities.Select(e => mapper.Map(e));
     }
 
     public async Task ProcessAsync(Guid id)
     {
         await Task.Delay(10000);
 
-        var order = _orders.FirstOrDefault(o => o.Id == id);
+        var order = await orderRepo.GetAsync(id);
         if (order == null)
             return;
 
-        order.Status = Enums.OrderStatus.Processed;
+        order.Status = DAL.Enums.OrderStatus.Processed;
+
+        await orderRepo.UpdateAsync(order);
     }
 }

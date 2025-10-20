@@ -1,5 +1,5 @@
+using OrderProcessingService.DAL.Entities;
 using OrderProcessingService.Dtos;
-using OrderProcessingService.Entities;
 
 namespace OrderProcessingService.Mappers;
 

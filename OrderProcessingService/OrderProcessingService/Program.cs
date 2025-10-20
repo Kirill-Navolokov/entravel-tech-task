@@ -1,7 +1,9 @@
 using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
 using OrderProcessingService.Config;
+using OrderProcessingService.DAL;
+using OrderProcessingService.DAL.Entities;
 using OrderProcessingService.Dtos;
-using OrderProcessingService.Entities;
 using OrderProcessingService.Mappers;
 using OrderProcessingService.Middleware;
 using OrderProcessingService.Services;
@@ -18,6 +20,8 @@ builder.Services.AddSingleton<IOrderService, OrderService>()
     .AddSingleton<IMessagingService, RabbitMessagingService>()
     .AddSingleton<IMapper<RequestOrderDto, ResponseOrderDto, OrderEntity>, OrderMapper>();
 
+builder.Services.AddDAL(builder.Configuration.GetConnectionString("OrdersDb")!);
+
 builder.Services.AddHostedService<OrderProcessor>();
 
 builder.Services.AddControllers()
@@ -29,6 +33,13 @@ builder.Services.AddControllers()
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
+
+using (var scope = app.Services.CreateScope())
+{
+    var factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<OrdersDbContext>>();
+    using var context = factory.CreateDbContext();
+    await context.Database.MigrateAsync();
+}
 
 
 app.UseHttpsRedirection();

@@ -21,4 +21,12 @@ public class OrderController(IOrderService orderService) : ControllerBase
 
         return order is null ? NotFound() : Ok(order);
     }
+
+    [HttpGet("order")]
+    public async Task<IActionResult> GetByCustomerAsync([FromQuery] Guid customerId)
+    {
+        var orders = await orderService.GetByCustomer(customerId);
+
+        return Ok(orders);
+    }
 }

@@ -8,5 +8,7 @@ public interface IOrderService
 
     Task<ResponseOrderDto?> GetAsync(Guid id);
 
+    Task<IEnumerable<ResponseOrderDto>> GetByCustomer(Guid customerId);
+
     Task ProcessAsync(Guid id);
 }

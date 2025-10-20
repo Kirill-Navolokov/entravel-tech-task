@@ -1,6 +1,6 @@
-using OrderProcessingService.Enums;
+using OrderProcessingService.DAL.Enums;
 
-namespace OrderProcessingService.Entities;
+namespace OrderProcessingService.DAL.Entities;
 
 public class OrderEntity
 {
@@ -9,4 +9,5 @@ public class OrderEntity
     public double TotalAmount { get; set; }
     public OrderStatus Status { get; set; }
     public List<OrderItemEntity> Items { get; set; }
+    public UserEntity Customer { get; set; }
 }

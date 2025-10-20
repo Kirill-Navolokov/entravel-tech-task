@@ -1,4 +1,4 @@
-using OrderProcessingService.Enums;
+using OrderProcessingService.DAL.Enums;
 
 namespace OrderProcessingService.Dtos;
 
