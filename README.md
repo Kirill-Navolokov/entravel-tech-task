@@ -1,9 +1,12 @@
 # entravel-tech-task
 
 ## Quick Start
-To run all services pull repo and run next command
 ```bash
-# Start all services (PostgreSql, RabbitMQ, Prometheus, OrderProcessing API Service, OrderProcessing Worker Service)
+To run all services:
+1. pull repo
+2. go to OrderProcessingService
+3. Run next command
+# Starts all services (PostgreSql, RabbitMQ, Prometheus, OrderProcessing API Service, OrderProcessing Worker Service)
 docker-compose up -d
 ```
 ## Architecture
