@@ -13,6 +13,7 @@ builder.Services.AddDAL(builder.Configuration.GetConnectionString("OrdersDb")!);
 builder.Services.AddMessaging(builder.Configuration);
 
 builder.Services.AddHostedService<OrderProcessor>();
+builder.Services.AddHostedService<MetricsHostedService>();
 
 var host = builder.Build();
 await host.RunAsync();

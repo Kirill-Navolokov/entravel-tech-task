@@ -69,7 +69,20 @@ services:
       ASPNETCORE_ENVIRONMENT: "Development"
       RabbitMQ__HostName: "amqp://guest:guest@rabbitmq:5672/"
       MessageQueues__Queues__Orders: "order-rabbit-mq"
+      Metrics__Port: "9100"
       ConnectionStrings__OrdersDb: "Host=postgres;Port=5432;Database=OrdersDb;Username=postgres;Password=example_pw;SSL Mode=Disable"
+    ports:
+      - "9100:9100"
+  
+  prometheus:
+    image: prom/prometheus:v2.55.0
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    depends_on:
+      worker: 
+        condition: service_started
 
 volumes:
   pgdata:

@@ -1,3 +1,4 @@
+using System.Diagnostics.Metrics;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using OrderProcessingService.DAL.Entities;
@@ -5,6 +6,7 @@ using OrderProcessingService.DAL.Repos;
 using OrderProcessingService.Messaging.Config;
 using OrderProcessingService.Messaging.Messages;
 using OrderProcessingService.Messaging.Services;
+using Prometheus;
 
 namespace OrderProcessingService.Workers;
 
@@ -13,6 +15,8 @@ public class OrderProcessor(
     IRepository<OrderEntity> orderRepo,
     IOptions<MessageQueueOptions> options) : BackgroundService
 {
+    private static readonly Counter MessagesProcessed = Metrics.CreateCounter("processed_order_amount", "Total ProcessOrderMessage messages handled");
+
     public override async Task StartAsync(CancellationToken cancellationToken)
     {
         await base.StartAsync(cancellationToken);
@@ -47,5 +51,7 @@ public class OrderProcessor(
         order.Status = DAL.Enums.OrderStatus.Processed;
 
         await orderRepo.UpdateAsync(order);
+
+        MessagesProcessed.Inc();
     }
 }
